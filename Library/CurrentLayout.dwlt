@@ -43,7 +43,7 @@ MonoBehaviour:
     y: 0
     width: 1904
     height: 980
-  m_MinSize: {x: 950, y: 300}
+  m_MinSize: {x: 950, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &3
 MonoBehaviour:
@@ -110,7 +110,7 @@ MonoBehaviour:
   m_MinSize: {x: 713, y: 492}
   m_MaxSize: {x: 18008, y: 14042}
   vertical: 0
-  controlID: 96
+  controlID: 690
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_MinSize: {x: 202, y: 442}
   m_MaxSize: {x: 4002, y: 8042}
   vertical: 1
-  controlID: 49
+  controlID: 691
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -160,7 +160,7 @@ MonoBehaviour:
   - {fileID: 14}
   - {fileID: 15}
   m_Selected: 0
-  m_LastSelected: 1
+  m_LastSelected: 0
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -209,7 +209,7 @@ MonoBehaviour:
   m_MinSize: {x: 234, y: 492}
   m_MaxSize: {x: 10004, y: 14042}
   vertical: 1
-  controlID: 97
+  controlID: 665
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -390,14 +390,14 @@ MonoBehaviour:
     width: 1157
     height: 354
   m_SceneLighting: 1
-  lastFramingTime: 1858.3464208036683
+  lastFramingTime: 5804.775576984903
   m_2DMode: 0
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 0.44199514, y: 1.7893263, z: -2.3927236}
+    m_Target: {x: -0.31809992, y: 2.7530377, z: 0.70353746}
     speed: 2
-    m_Value: {x: 0.44199514, y: 1.7893263, z: -2.3927236}
+    m_Value: {x: -0.31809992, y: 2.7530377, z: 0.70353746}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -420,13 +420,13 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
-    m_Target: {x: -0.00017688074, y: 0.99921614, z: 0.004496383, w: 0.03928568}
+    m_Target: {x: 0.13447349, y: 0.040705748, z: 0.0055344375, w: -0.9900464}
     speed: 2
-    m_Value: {x: -0.00017688106, y: 0.9992179, z: 0.004496391, w: 0.03928575}
+    m_Value: {x: 0.134476, y: 0.04070651, z: 0.0055345413, w: -0.990065}
   m_Size:
-    m_Target: 6.0209312
+    m_Target: 3.3019261
     speed: 2
-    m_Value: 6.0209312
+    m_Value: 3.3019261
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -514,23 +514,23 @@ MonoBehaviour:
     height: 497
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ae250000
+    m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: e0fbffffe2fbffff00000000
+    m_ExpandedIDs: 0c75f6ffe0fbffffe2fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Point light
+      m_OriginalName: Point light
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: -667772
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 10}
     m_SearchString: 
@@ -576,18 +576,18 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Animations/Player
+    - Assets/Prefabs/Creations
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Animations/Player
+  - Assets/Prefabs/Creations
   m_LastFoldersGridSize: 16
   m_LastProjectPath: D:\Unity Folder\Cinderella
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ea280000
-    m_LastClickedID: 10474
+    m_SelectedIDs: 0a2a0000
+    m_LastClickedID: 10762
     m_ExpandedIDs: 00000000ba24000014260000482900000a2a000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -616,7 +616,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ba24000014260000482900000a2a0000
+    m_ExpandedIDs: 00000000ba24000014260000482900000a2a000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -644,21 +644,21 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: 8c2b0000e8240000262a00004c3300001c340000d0440000309a0000
+    m_ExpandedInstanceIDs: 8c2b0000e8240000262a00004c3300001c340000d0440000309a0000e2240000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: Models
+      m_OriginalName: Models
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 32364
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 11}
     m_CreateAssetUtility:

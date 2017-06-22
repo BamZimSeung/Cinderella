@@ -25,8 +25,9 @@ public class ItemObsManager : MonoBehaviour {
 	public float obsGenerateGap;
 	//장애물 생성을 위한 시간 누적 변수;
 	float obsTime;
-	//장애물 생성 준비 여부
-	bool isObsReady =false;
+	//장애물 위치
+	int obsPos;
+	GameObject currObs;
 	// Use this for initialization
 	void Start () {
 		
@@ -40,6 +41,10 @@ public class ItemObsManager : MonoBehaviour {
 			currentPos=Random.Range(0,3);
 			StartCoroutine(itemGenerate());
 			itemTime=0;
+		}
+		if(obsTime>=obsGenerateGap){
+			obsCreate();
+			obsTime=0;
 		}
 	}
 
@@ -64,9 +69,25 @@ public class ItemObsManager : MonoBehaviour {
 				currentPos=Random.Range(1,3);
 				item.transform.position=transform.position+Vector3.right*2;
 			}
-			//
+			if(currObs!=null&& Vector3.Distance(currObs.transform.position,item.transform.position)<2){
+				item.transform.position+=Vector3.up;
+			}
 			item.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
 			yield return new WaitForSeconds(generateFrame);
 		}
+	}
+	
+	void obsCreate(){
+		obsPos=Random.Range(0,3);
+		print(obsPos);
+		GameObject obs= Instantiate(obsPrefab);
+		currObs=obs;
+		obs.transform.position=transform.position;
+		if(obsPos==0){
+				obs.transform.position+=transform.position+Vector3.left*2;
+		}else if(obsPos==2){
+			obs.transform.position+=Vector3.right*2;
+		}
+			obs.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
 	}
 }

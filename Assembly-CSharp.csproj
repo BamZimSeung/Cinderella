@@ -49,7 +49,6 @@
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\Item.cs" />
      <Compile Include="Assets\Scripts\ItemManager.cs" />
-     <Compile Include="Assets\Scripts\PlayerJump.cs" />
      <Compile Include="Assets\Scripts\PlayerMove.cs" />
      <Compile Include="Assets\Scripts\RequestCreateRoad.cs" />
      <Compile Include="Assets\Scripts\RequestDestroyRoad.cs" />

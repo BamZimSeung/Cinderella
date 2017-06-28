@@ -5,14 +5,19 @@ using UnityEngine;
 public class ItemManager : MonoBehaviour {
 
 	//아이템 프리펩 배열
-	public GameObject[] itemsPrefab;
-	public int maxItemCount;
+	public GameObject[] itemsPrefabs;
 
+	//보석생성여부
+	bool isGem=false;
 	//아이템 생성 시간차
 	public float ItemGenerateGap;
 	
-	//아이템 생성 프레임당 시간
-	public float generateFrame;
+	int gemCount;
+	
+	public int maxGemCount;
+	public int minGemCount;
+
+
 
 	//아이템 생성을 위한 시간 누적 변수;
 	float itemTime=10;
@@ -20,7 +25,8 @@ public class ItemManager : MonoBehaviour {
 	int currentPos;
 
 	//장애물 프리펩
-	public GameObject obsPrefab;
+	public GameObject[] obsPrefabs;
+	int currObsIndex;
 	//장애물 생성 시간차
 	public float obsGenerateGap;
 	//장애물 생성을 위한 시간 누적 변수;
@@ -30,7 +36,7 @@ public class ItemManager : MonoBehaviour {
 	GameObject currObs;
 	// Use this for initialization
 	void Start () {
-		
+		currentPos=Random.Range(0,3);
 	}
 	
 	// Update is called once per frame
@@ -38,8 +44,7 @@ public class ItemManager : MonoBehaviour {
 		itemTime+=Time.deltaTime;
 		obsTime+=Time.deltaTime;
 		if(itemTime>=ItemGenerateGap){
-			currentPos=Random.Range(0,3);
-			StartCoroutine(itemGenerate());
+			itemGenerate();
 			itemTime=0;
 		}
 		if(obsTime>=obsGenerateGap){
@@ -48,15 +53,21 @@ public class ItemManager : MonoBehaviour {
 		}
 	}
 
-	IEnumerator itemGenerate(){
-		for(int i=0;i<maxItemCount;i++){
+	void itemGenerate(){
 			GameObject item=null;
 			//3이 아닐경우 코인 생성, 3일경우 보석 생성
-			if(i!=3){
-				item = Instantiate(itemsPrefab[0]);
+			if(gemCount==0){
+				isGem=true;
+				gemCount=Random.Range(minGemCount,maxGemCount+1);
 			}
-			else if(i==3){
-				item = Instantiate(itemsPrefab[1]);
+			if(!isGem){
+				item = Instantiate(itemsPrefabs[0]);
+				gemCount--;
+				
+			}
+			else{
+				item = Instantiate(itemsPrefabs[Random.Range(1,itemsPrefabs.Length)]);
+				isGem=!isGem;
 			}
 			//currentPos에 따라 위치 지정,다음 currentPos지정
 			if(currentPos==0){
@@ -69,22 +80,27 @@ public class ItemManager : MonoBehaviour {
 				currentPos=Random.Range(1,3);
 				item.transform.position=transform.position+Vector3.right*2;
 			}
-			if(currObs!=null&& Vector3.Distance(currObs.transform.position,item.transform.position)<2){
+			if(currObs!=null&& 
+			(currObs.transform.position.z-item.transform.position.z)*(currObs.transform.position.z-item.transform.position.z)<4
+			&&currObs.transform.position.x==item.transform.position.x){
+				if(currObsIndex==0){
 				item.transform.position+=Vector3.up;
+				}else{
+					Destroy(item);
+				}
 			}
 			item.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
-			yield return new WaitForSeconds(generateFrame);
-		}
+		
 	}
 	
 	void obsCreate(){
 		obsPos=Random.Range(0,3);
-		print(obsPos);
-		GameObject obs= Instantiate(obsPrefab);
+		currObsIndex=Random.Range(0,itemsPrefabs.Length);
+		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
 		currObs=obs;
 		obs.transform.position=transform.position;
 		if(obsPos==0){
-				obs.transform.position+=transform.position+Vector3.left*2;
+				obs.transform.position+=Vector3.left*2;
 		}else if(obsPos==2){
 			obs.transform.position+=Vector3.right*2;
 		}

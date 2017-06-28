@@ -14,7 +14,6 @@ public class PlayerMove : MonoBehaviour {
 
     public float rotationLimit;
 
-    public float jumpSpeed;
 	void Start () {
 		anim = gameObject.GetComponentInChildren<Animator>();
 	}
@@ -44,8 +43,6 @@ public class PlayerMove : MonoBehaviour {
         if (Input.GetButtonDown("Jump"))
         {
             anim.SetTrigger("Jump");
-            GetComponent<Rigidbody>().velocity+=Vector3.up*jumpSpeed;
-            
         }
 
         // 애니메이션 후 캐릭터가 회전하길래 임시적으로 막음

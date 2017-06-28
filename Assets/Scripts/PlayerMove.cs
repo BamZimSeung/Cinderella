@@ -58,9 +58,12 @@ public class PlayerMove : MonoBehaviour {
 
     IEnumerator Move(int posNum)
     {
+        float x = transform.position.x;
+
         while (Vector3.Distance(movePositions[posNum].position, transform.position) > 0.1f)
         {
-            transform.position = Vector3.Lerp(transform.position, movePositions[posNum].position, moveHorizontalSpeed);
+            x = Mathf.Lerp(transform.position.x, movePositions[posNum].position.x, moveHorizontalSpeed);
+            transform.position = new Vector3(x, transform.position.y, transform.position.z);
 
             yield return null;
         }

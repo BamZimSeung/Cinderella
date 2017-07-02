@@ -26,8 +26,6 @@ public class GameManager : MonoBehaviour {
         score = 0;
         scoreTxt.text = score.ToString();
 
-        Debug.Log(scoreTxt.transform.position);
-        Debug.Log(Camera.main.ViewportToWorldPoint(scoreTxt.transform.position));
     }
 
     public void AddScore(int scorePoint)

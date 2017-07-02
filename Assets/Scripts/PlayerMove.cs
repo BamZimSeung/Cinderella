@@ -47,13 +47,6 @@ public class PlayerMove : MonoBehaviour {
             gameObject.GetComponent<Rigidbody>().velocity=Vector3.up*jumpSpeed;
             
         }
-
-        // 애니메이션 후 캐릭터가 회전하길래 임시적으로 막음
-        if (!(Mathf.Abs(transform.eulerAngles.y) < rotationLimit || Mathf.Abs(transform.eulerAngles.y) > 360 - rotationLimit))
-        {
-            transform.rotation = Quaternion.Euler(Vector3.zero);
-            Debug.Log("회전 재조정");
-        }
     }
 
     IEnumerator Move(int posNum)

@@ -95,7 +95,8 @@ public class ItemManager : MonoBehaviour {
 	
 	void obsCreate(){
 		obsPos=Random.Range(0,3);
-		currObsIndex=Random.Range(0,itemsPrefabs.Length);
+		currObsIndex=Random.Range(0,obsPrefabs.Length);
+		print(currObsIndex);
 		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
 		currObs=obs;
 		obs.transform.position=transform.position;

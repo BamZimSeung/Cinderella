@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
 
     public int feverDecRate;
     public float feverSpeed;
+
     // 콤보 UI 색깔
     public byte3 imgColor;
     public byte3 txtColor;
@@ -120,6 +121,7 @@ public class GameManager : MonoBehaviour {
             fever(combo);
         }
     }	
+
     public void fever(int cmb){
         if(cmb<=100+feverStep){
             feverCount+=(cmb-feverStep)/10 +1;
@@ -131,6 +133,7 @@ public class GameManager : MonoBehaviour {
             StartCoroutine("feverMode");
         }
     }
+
     IEnumerator feverMode(){
         isFeverMode=!isFeverMode;
         float FC=100;

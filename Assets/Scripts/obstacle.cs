@@ -8,6 +8,10 @@ public class obstacle : MonoBehaviour {
 	public int damage;
 	public float reduceSpeed;
 
+    // 이펙트 사운드
+    public AudioClip destroySound;
+    public AudioClip clashSound;
+
     public int pos;
 
     // 먹혔는지 확인
@@ -33,6 +37,7 @@ public class obstacle : MonoBehaviour {
                 // 먹힘
                 isClash = true;
 				if(!GameManager.Instance.isFeverMode){
+                    SoundManager.Instance.PlayOnSound(clashSound);
                     RoadManager.Instance.Clashed(reduceSpeed);
                     Destroy(gameObject);
                 }else{
@@ -44,7 +49,9 @@ public class obstacle : MonoBehaviour {
                     }else{
                         vDir=new Vector3(0.25f,0.5f,4);
                     }
-                    
+
+                    SoundManager.Instance.PlayOnSound(destroySound);
+
                     //여기서 요 디스트로이 지우고 이펙트 넣으면 됨
                     StartCoroutine(bangle(vDir));
                 }			
@@ -53,6 +60,7 @@ public class obstacle : MonoBehaviour {
         }
 
     }
+
     IEnumerator bangle(Vector3 vDir){
         float currentTime=0;
         while(currentTime<3){

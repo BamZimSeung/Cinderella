@@ -26,6 +26,9 @@ public class Item : MonoBehaviour {
     float currentTime;
     bool isUsed=false;
 
+    // 사운드 오디오 클립
+    public AudioClip effectSound;
+
 	// Use this for initialization
 	void Start () {
         isGet = false;
@@ -73,6 +76,9 @@ public class Item : MonoBehaviour {
             {
                 // 점수를 추가
                 GameManager.Instance.AddScore(score,recoveryTime,itemIndex);
+                
+                // 소리 재생
+                SoundManager.Instance.PlayOnSound(effectSound);
 
                 // 먹힘
                 isGet = true;

@@ -84,6 +84,7 @@ public class GameManager : MonoBehaviour {
             feverDecRate=10;
             maxFeverCount=10;
             difficultyStep=1000;
+            maxTime=200;
         }
 
         currentGameSpeed=gameSpeed;
@@ -122,9 +123,8 @@ public class GameManager : MonoBehaviour {
         
     }
 
-    public void AddScore(int scorePoint,float recoveryTime,int indexNow,float hpFill)
+    public void AddScore(int scorePoint,float recoveryTime,int indexNow)
     {
-        restTime+=hpFill;
         if(indexNow-pastIndex==1){
             combo++;
         }else if(protectComboIndex.Count!=0){
@@ -166,7 +166,10 @@ public class GameManager : MonoBehaviour {
         }
         score += (int)(scorePoint*comboWeight);
 
-        restTime+=recoveryTime;
+        restTime+=recoveryTime/gameSpeed;
+        if(restTime>=maxTime){
+            restTime=maxTime;
+        }
 
         scoreTxt.text = score.ToString();
         comboTxt.text = "Combo " + combo;

@@ -9,7 +9,6 @@ public class Item : MonoBehaviour {
     public int itemIndex;
     int magnetDis=10;
     int itemSpeed=5;
-    float hpFill;
 
     // 먹혔는지 확인
     bool isGet;
@@ -75,7 +74,7 @@ public class Item : MonoBehaviour {
             if (other.gameObject.CompareTag("Player"))
             {
                 // 점수를 추가
-                GameManager.Instance.AddScore(score,recoveryTime,itemIndex,hpFill);
+                GameManager.Instance.AddScore(score,recoveryTime,itemIndex);
                 
                 // 소리 재생
                 SoundManager.Instance.PlayOnSound(effectSound);

@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\RequestDestroyRoad.cs" />
      <Compile Include="Assets\Scripts\RoadManager.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
+     <Compile Include="Assets\Scripts\StartSceneManager.cs" />
      <Compile Include="Assets\Scripts\obstacle.cs" />
      <None Include="Assets\Plugins\Pixelplacement\iTween\ReadMe!\ReadMe!.txt" />
  <Reference Include="UnityEngine.UI">

@@ -27,7 +27,7 @@ public class RoadManager : MonoBehaviour {
         if(GameManager.Instance.isPlaying){
             int roadCount = roads.Count;
             for(int i = 0; i < roadCount; i++){
-                roads[i].transform.Translate(Vector3.back * roadMoveSpeed * Time.deltaTime*GameManager.Instance.gameSpeed);
+                roads[i].transform.Translate(Vector3.back * roadMoveSpeed * Time.deltaTime*GameManager.Instance.currentGameSpeed);
             }
         }
         
@@ -56,13 +56,12 @@ public class RoadManager : MonoBehaviour {
     }
     public IEnumerator ClashedCoroutine(float reduceSpeed)
     {
-        float originalGameSpeed=GameManager.Instance.gameSpeed;
-        GameManager.Instance.gameSpeed=reduceSpeed;
-        while(GameManager.Instance.gameSpeed<=1){
-           GameManager.Instance.gameSpeed+=Time.deltaTime*addSpeedRatePerTime;
+        GameManager.Instance.currentGameSpeed=reduceSpeed;
+        while(GameManager.Instance.currentGameSpeed<=1){
+           GameManager.Instance.currentGameSpeed+=Time.deltaTime*addSpeedRatePerTime;
             yield return null;
         }
-        GameManager.Instance.gameSpeed=originalGameSpeed;
+        GameManager.Instance.currentGameSpeed=GameManager.Instance.gameSpeed;
         
     }
 }

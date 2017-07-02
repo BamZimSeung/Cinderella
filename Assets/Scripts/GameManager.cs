@@ -9,7 +9,11 @@ public class GameManager : MonoBehaviour {
 
     public bool isPlaying=true;
 
+    public float currentGameSpeed=1.0f;
+
     public float gameSpeed=1.0f;
+
+
 
     // 점수 변수
     public int score = 0;
@@ -27,6 +31,7 @@ public class GameManager : MonoBehaviour {
     public Animator comboAnim;
 
     public float restTime;
+    public float maxTime;
 
     int pastIndex= -2;
 
@@ -50,6 +55,20 @@ public class GameManager : MonoBehaviour {
     public byte colorUIAlpha;
 
     public List<int> protectComboIndex;
+
+    //현재 난이도
+    public difficulty currentDifficulty;
+    public int difficultyStep =10000;
+    
+    public difficulty[] levels=new difficulty[3];
+    
+    public int level=0;
+
+    public Slider HPbar;
+    public Image feverBar;
+    public bool isEasyMode=false;
+    
+    
 	void Start () {
 		if(Instance == null)
         {
@@ -59,9 +78,18 @@ public class GameManager : MonoBehaviour {
         {
             Destroy(this);
         }
+        //레벨별 난이도 설정
+        if(isEasyMode){
+            gameSpeed=1.0f;
+            feverDecRate=10;
+            maxFeverCount=10;
+            difficultyStep=1000;
+        }
 
+        currentGameSpeed=gameSpeed;
         score = 0;
         scoreTxt.text = score.ToString();
+        restTime=maxTime;
 
         // UI 색깔 초기화
         colorUIAlpha = 0;
@@ -70,6 +98,13 @@ public class GameManager : MonoBehaviour {
 
         comboImg.color = new Color32(imgColor.r, imgColor.g, imgColor.b, colorUIAlpha);
         comboTxt.color = new Color32(txtColor.r, txtColor.g, txtColor.b, colorUIAlpha);
+        
+        levels[0]=new difficulty(1.0f,false);
+        levels[1]=new difficulty(2f,false);
+        levels[2]=new difficulty(3f,true);
+        currentDifficulty=levels[level];
+        
+        
     }
 
     void Update()
@@ -78,10 +113,18 @@ public class GameManager : MonoBehaviour {
         if(restTime<=0){
             isPlaying=false;
         }
+        HPbar.value=restTime/maxTime;
+        feverBar.fillAmount=(float)feverCount/(float)maxFeverCount;
+        if(score>=(level+1)*difficultyStep&&level<2){
+            level++;
+            currentDifficulty=levels[level];
+        }
+        
     }
 
-    public void AddScore(int scorePoint,float recoveryTime,int indexNow)
+    public void AddScore(int scorePoint,float recoveryTime,int indexNow,float hpFill)
     {
+        restTime+=hpFill;
         if(indexNow-pastIndex==1){
             combo++;
         }else if(protectComboIndex.Count!=0){
@@ -109,7 +152,20 @@ public class GameManager : MonoBehaviour {
             feverStep=0;
         }
         pastIndex=indexNow;
-        score += scorePoint;
+        float comboWeight=1.0f;
+        if(combo>=100){
+            comboWeight=3.5f;
+        }else if(combo>=80){
+            comboWeight=3.0f;
+        }else if(combo>=60){
+            comboWeight=2.5f;
+        }else if(combo>40){
+            comboWeight=2.0f;
+        }else if(combo>20){
+            comboWeight=1.5f;
+        }
+        score += (int)(scorePoint*comboWeight);
+
         restTime+=recoveryTime;
 
         scoreTxt.text = score.ToString();
@@ -137,8 +193,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator feverMode(){
         isFeverMode=!isFeverMode;
         float FC=100;
-        float orgGameSpeed=gameSpeed;
-        gameSpeed=feverSpeed;
+        currentGameSpeed=feverSpeed;
         while(FC>=0){
             FC-=Time.deltaTime*feverDecRate;
             yield return null;
@@ -147,7 +202,7 @@ public class GameManager : MonoBehaviour {
         isFeverMode=!isFeverMode;
         feverStep=combo;
         feverCount =0;
-        gameSpeed=orgGameSpeed;
+        currentGameSpeed=gameSpeed;
     }
 
     public void Clash(int damage){
@@ -206,6 +261,19 @@ public class GameManager : MonoBehaviour {
             this.r = _r;
             this.g = _g;
             this.b = _b;
+        }
+    }
+    
+    //난이도 조절 필요 변수
+    //1.현재 난이도(변수의 인덱스)
+    //2.장애물 생성 빈도
+    //3.장애물 동시등장 여부
+    public class difficulty{
+        public float obsSpwanSpeed;
+        public bool isMultiObs;
+        public difficulty(float _obsSpwanSpeed, bool _isMultiObs){
+            this.obsSpwanSpeed=_obsSpwanSpeed;
+            this.isMultiObs=_isMultiObs;
         }
     }
 }

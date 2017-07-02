@@ -65,7 +65,7 @@ public class obstacle : MonoBehaviour {
         float currentTime=0;
         while(currentTime<3){
             currentTime+=Time.deltaTime;
-            gameObject.transform.Translate((vDir+Vector3.up)*Time.deltaTime*obsSpeed*GameManager.Instance.gameSpeed,Space.World);
+            gameObject.transform.Translate((vDir+Vector3.up)*Time.deltaTime*obsSpeed*GameManager.Instance.currentGameSpeed,Space.World);
             gameObject.transform.Rotate(0,0,10);
             yield return null;
         }

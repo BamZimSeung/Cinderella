@@ -34,7 +34,7 @@ public class ItemManager : MonoBehaviour {
 	//장애물 생성을 위한 시간 누적 변수;
 	float obsTime;
 	//장애물 위치
-	int obsPos;
+	int[] obsPos=new int[2];
 	// Use this for initialization
 	void Start () {
 		currentPos=Random.Range(0,3);
@@ -44,12 +44,18 @@ public class ItemManager : MonoBehaviour {
 	void Update () {
 		itemTime+=Time.deltaTime;
 		obsTime+=Time.deltaTime;
-		if(itemTime*GameManager.Instance.gameSpeed>=ItemGenerateGap){
+		if(itemTime*GameManager.Instance.currentGameSpeed>=ItemGenerateGap){
 			itemGenerate();
 			itemTime=0;
 		}
-		if(obsTime*GameManager.Instance.gameSpeed>=obsGenerateGap){
-			obsCreate();
+		if(obsTime*GameManager.Instance.currentGameSpeed*GameManager.Instance.currentDifficulty.obsSpwanSpeed>=obsGenerateGap){
+			Vector3 posNow=transform.position;
+			obsPos[0]=Random.Range(0,3);
+			obsPos[1]=Random.Range(0,3);
+			if(GameManager.Instance.currentDifficulty.isMultiObs&&obsPos[0]!=obsPos[1]){
+				obsCreate(posNow,obsPos[1]);
+			}
+			obsCreate(posNow,obsPos[0]);
 			obsTime=0;
 		}
 	}
@@ -98,18 +104,18 @@ public class ItemManager : MonoBehaviour {
 		
 	}
 	
-	void obsCreate(){
-		obsPos=Random.Range(0,3);
+	void obsCreate(Vector3 posNow,int _obsPos){
+		
 		currObsIndex=Random.Range(0,obsPrefabs.Length);
 		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
-		obs.GetComponent<obstacle>().pos=obsPos;
-		obs.transform.position=transform.position;
-		if(obsPos==0){
+		obs.GetComponent<obstacle>().pos=_obsPos;
+		obs.transform.position=posNow;
+		if(_obsPos==0){
 				obs.transform.position+=Vector3.left*2;
-		}else if(obsPos==2){
+		}else if(_obsPos==2){
 			obs.transform.position+=Vector3.right*2;
 		}
-			obs.transform.position+=Vector3.down;
-			obs.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
+		obs.transform.position+=Vector3.down;
+		obs.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
 	}
 }

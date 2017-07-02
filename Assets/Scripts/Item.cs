@@ -9,6 +9,7 @@ public class Item : MonoBehaviour {
     public int itemIndex;
     int magnetDis=10;
     int itemSpeed=5;
+    float hpFill;
 
     // 먹혔는지 확인
     bool isGet;
@@ -42,10 +43,9 @@ public class Item : MonoBehaviour {
             isUsed=true;
             GameObject[] Obs=GameObject.FindGameObjectsWithTag("Obs");
             int lth =Obs.Length;
-            
             for(int i=0;i<lth;i++){
                 if(gameObject.transform.position.x==Obs[i].transform.position.x){
-                   if(Vector3.Distance(gameObject.transform.position,Obs[i].transform.position)<4.698f*GameManager.Instance.gameSpeed){
+                   if(Vector3.Distance(gameObject.transform.position,Obs[i].transform.position)<4.698f*GameManager.Instance.currentGameSpeed){
                        if(Obs[i].name.Contains("Maid")){
                            gameObject.transform.position+=Vector3.up;
                        }else{
@@ -75,7 +75,7 @@ public class Item : MonoBehaviour {
             if (other.gameObject.CompareTag("Player"))
             {
                 // 점수를 추가
-                GameManager.Instance.AddScore(score,recoveryTime,itemIndex);
+                GameManager.Instance.AddScore(score,recoveryTime,itemIndex,hpFill);
                 
                 // 소리 재생
                 SoundManager.Instance.PlayOnSound(effectSound);

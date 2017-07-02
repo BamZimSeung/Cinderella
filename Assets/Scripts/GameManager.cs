@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour {
 
     int combo=0;
 
+    public List<int> protectComboIndex;
 	void Start () {
 		if(Instance == null)
         {
@@ -49,8 +50,25 @@ public class GameManager : MonoBehaviour {
     {
         if(indexNow-pastIndex==1){
             combo++;
-        }else{
-            combo=1;
+        }else if(protectComboIndex.Count!=0){
+            for(int i=1;i<protectComboIndex.Count;i++){
+                if(protectComboIndex[i]-protectComboIndex[i-1]==1){
+                    protectComboIndex.RemoveAt(i-1);
+                    i--;
+                }
+            }
+           for(int i=1;i<protectComboIndex.Count;i++){
+               if(protectComboIndex[i]-indexNow<-1){
+                 protectComboIndex.RemoveAt(i);  
+                 i--;
+               }
+           }
+           if(protectComboIndex[0]-indexNow==-1){
+            combo++;
+            protectComboIndex.RemoveAt(0);
+           }else{
+               combo=1;
+           }
         }
         pastIndex=indexNow;
         score += scorePoint;

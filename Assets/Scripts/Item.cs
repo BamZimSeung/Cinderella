@@ -21,12 +21,37 @@ public class Item : MonoBehaviour {
     // 스코어 보드에 접근하는 스피드
     [Range(0,1.0f)]
     public float approachSpeed = 0.1f;
+    float currentTime;
+    bool isUsed=false;
 
 	// Use this for initialization
 	void Start () {
         isGet = false;
 	}
-
+    void Update()
+    {
+        currentTime+=Time.deltaTime;
+        if(currentTime>2&&!isUsed){
+            isUsed=true;
+            GameObject[] Obs=GameObject.FindGameObjectsWithTag("Obs");
+            int lth =Obs.Length;
+            
+            for(int i=0;i<lth;i++){
+                if(gameObject.transform.position.x==Obs[i].transform.position.x){
+                   if(Vector3.Distance(gameObject.transform.position,Obs[i].transform.position)<4.698f*GameManager.Instance.gameSpeed){
+                       if(Obs[i].name.Contains("Maid")){
+                           gameObject.transform.position+=Vector3.up;
+                       }else{
+                           GameManager.Instance.protectComboIndex.Add(itemIndex);
+                           print("아이템파괴"+itemIndex);
+                           Destroy(gameObject);
+                       }
+                   } 
+                }
+            }
+        }
+        
+    }
     void OnTriggerEnter(Collider other)
     {
         // 아직 먹히지 않았다면

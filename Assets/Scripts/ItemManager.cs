@@ -84,15 +84,17 @@ public class ItemManager : MonoBehaviour {
 				currentPos=Random.Range(1,3);
 				item.transform.position=transform.position+Vector3.right*2;
 			}
-			if(currObs!=null&& 
-			(currObs.transform.position.z-item.transform.position.z)*(currObs.transform.position.z-item.transform.position.z)<4
-			&&currObs.transform.position.x==item.transform.position.x){
-				if(currObsIndex==0){
-				item.transform.position+=Vector3.up;
-				}else{
-					Destroy(item);
-				}
-			}
+			// if(currObs!=null&& 
+			// (currObs.transform.position.z-item.transform.position.z)*(currObs.transform.position.z-item.transform.position.z)<6.25f
+			// &&(currObs.transform.position.x-item.transform.position.x)*(currObs.transform.position.x-item.transform.position.x)<1){
+			// 	if(currObsIndex==0){
+			// 		item.transform.position+=Vector3.up;
+			// 	}else{
+			// 		Destroy(item);
+			// 		indexNow--;
+			// 		print("아이템파괴");
+			// 	}
+			// }
 			item.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
 		
 	}
@@ -100,7 +102,6 @@ public class ItemManager : MonoBehaviour {
 	void obsCreate(){
 		obsPos=Random.Range(0,3);
 		currObsIndex=Random.Range(0,obsPrefabs.Length);
-		print(currObsIndex);
 		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
 		currObs=obs;
 		obs.transform.position=transform.position;
@@ -109,6 +110,7 @@ public class ItemManager : MonoBehaviour {
 		}else if(obsPos==2){
 			obs.transform.position+=Vector3.right*2;
 		}
+			obs.transform.position+=Vector3.down;
 			obs.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
 	}
 }

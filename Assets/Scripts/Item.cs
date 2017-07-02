@@ -7,6 +7,8 @@ public class Item : MonoBehaviour {
     public int score;
 
     public int itemIndex;
+    int magnetDis=10;
+    int itemSpeed=5;
 
     // 먹혔는지 확인
     bool isGet;
@@ -30,7 +32,9 @@ public class Item : MonoBehaviour {
 	}
     void Update()
     {
-        currentTime+=Time.deltaTime;
+        if(!isUsed){
+            currentTime+=Time.deltaTime;
+        }
         if(currentTime>2&&!isUsed){
             isUsed=true;
             GameObject[] Obs=GameObject.FindGameObjectsWithTag("Obs");
@@ -48,6 +52,13 @@ public class Item : MonoBehaviour {
                        }
                    } 
                 }
+            }
+        }
+        if(GameManager.Instance.isFeverMode){
+            GameObject player =GameObject.Find("Player");
+            if(Vector3.Distance(gameObject.transform.position,player.transform.position)<magnetDis){
+                Vector3 vDir=player.transform.position-gameObject.transform.position;
+                gameObject.transform.Translate(vDir*Time.deltaTime*itemSpeed,Space.World);
             }
         }
         

@@ -35,7 +35,6 @@ public class ItemManager : MonoBehaviour {
 	float obsTime;
 	//장애물 위치
 	int obsPos;
-	GameObject currObs;
 	// Use this for initialization
 	void Start () {
 		currentPos=Random.Range(0,3);
@@ -103,7 +102,7 @@ public class ItemManager : MonoBehaviour {
 		obsPos=Random.Range(0,3);
 		currObsIndex=Random.Range(0,obsPrefabs.Length);
 		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
-		currObs=obs;
+		obs.GetComponent<obstacle>().pos=obsPos;
 		obs.transform.position=transform.position;
 		if(obsPos==0){
 				obs.transform.position+=Vector3.left*2;

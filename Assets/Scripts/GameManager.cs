@@ -32,6 +32,16 @@ public class GameManager : MonoBehaviour {
 
     int combo=0;
 
+    int feverCount=0;
+
+    public int maxFeverCount=100;
+
+    int feverStep = 0;
+
+    public bool isFeverMode=false;
+
+    public int feverDecRate;
+    public float feverSpeed;
     // 콤보 UI 색깔
     public byte3 imgColor;
     public byte3 txtColor;
@@ -91,9 +101,11 @@ public class GameManager : MonoBehaviour {
             protectComboIndex.RemoveAt(0);
            }else{
                combo=1;
+               feverStep=0;
            }
         }else{
             combo=1;
+            feverStep=0;
         }
         pastIndex=indexNow;
         score += scorePoint;
@@ -104,16 +116,45 @@ public class GameManager : MonoBehaviour {
 
         StopCoroutine("ShowCombo");
         StartCoroutine("ShowCombo");
+        if(!isFeverMode){
+            fever(combo);
+        }
     }	
+    public void fever(int cmb){
+        if(cmb<=100+feverStep){
+            feverCount+=(cmb-feverStep)/10 +1;
+        }else{
+            feverCount+=10;
+        }
+        print(feverCount);
+        if(feverCount>maxFeverCount){
+            StartCoroutine("feverMode");
+        }
+    }
+    IEnumerator feverMode(){
+        isFeverMode=!isFeverMode;
+        float FC=100;
+        float orgGameSpeed=gameSpeed;
+        gameSpeed=feverSpeed;
+        while(FC>=0){
+            FC-=Time.deltaTime*feverDecRate;
+            yield return null;
+        }
+        print("피버 끝");
+        isFeverMode=!isFeverMode;
+        feverStep=combo;
+        feverCount =0;
+        gameSpeed=orgGameSpeed;
+    }
 
     public void Clash(int damage){
-        restTime-=damage;
-        combo=0;
+        if(isFeverMode){
+            score += damage*10;
 
-        comboTxt.text = "띠용?!";
-
-        StopCoroutine("ShowCombo");
-        StartCoroutine("ShowCombo");
+        }else{
+            restTime-=damage;
+            combo=0;
+        }
     }
 
     IEnumerator ShowCombo()

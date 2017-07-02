@@ -16,6 +16,8 @@ public class ItemManager : MonoBehaviour {
 	
 	public int maxGemCount;
 	public int minGemCount;
+	
+	int indexNow;
 
 
 
@@ -43,11 +45,11 @@ public class ItemManager : MonoBehaviour {
 	void Update () {
 		itemTime+=Time.deltaTime;
 		obsTime+=Time.deltaTime;
-		if(itemTime>=ItemGenerateGap){
+		if(itemTime*GameManager.Instance.gameSpeed>=ItemGenerateGap){
 			itemGenerate();
 			itemTime=0;
 		}
-		if(obsTime>=obsGenerateGap){
+		if(obsTime*GameManager.Instance.gameSpeed>=obsGenerateGap){
 			obsCreate();
 			obsTime=0;
 		}
@@ -67,8 +69,10 @@ public class ItemManager : MonoBehaviour {
 			}
 			else{
 				item = Instantiate(itemsPrefabs[Random.Range(1,itemsPrefabs.Length)]);
+				
 				isGem=!isGem;
 			}
+			item.transform.gameObject.GetComponent<Item>().itemIndex=indexNow++;
 			//currentPos에 따라 위치 지정,다음 currentPos지정
 			if(currentPos==0){
 				currentPos=Random.Range(0,2);

@@ -11,6 +11,7 @@ public class RoadManager : MonoBehaviour {
     public float roadMoveSpeed;
 
     public static RoadManager Instance = null;
+    public float addSpeedRatePerTime;
 
     void Start()
     {
@@ -23,16 +24,20 @@ public class RoadManager : MonoBehaviour {
 
 	void Update () {
         // 리스트 내의 모든 로드를 움직인다.
-        int roadCount = roads.Count;
-        for(int i = 0; i < roadCount; i++){
-            roads[i].transform.Translate(Vector3.back * roadMoveSpeed * Time.deltaTime);
+        if(GameManager.Instance.isPlaying){
+            int roadCount = roads.Count;
+            for(int i = 0; i < roadCount; i++){
+                roads[i].transform.Translate(Vector3.back * roadMoveSpeed * Time.deltaTime*GameManager.Instance.gameSpeed);
+            }
         }
+        
 	}
 
     // 로드 생성을 요청한 로드의 "SpawnPos"의 위치에 새 로드를 생성
     public void CreateRoad(GameObject requestRoad)
     {
         // 랜덤 프리팹 생성
+        Debug.Log("길 생성");
         int ranNum = Random.Range(0, roadPrefabs.Length);
         GameObject newRoad = Instantiate(roadPrefabs[ranNum], requestRoad.transform.FindChild("SpawnPos").transform.position, Quaternion.identity);
         roads.Add(newRoad);
@@ -44,5 +49,20 @@ public class RoadManager : MonoBehaviour {
         int roadCount = roads.Count;
         roads.Remove(target);
         Debug.Log("리스트에서 길 제거");
+    }
+
+    public void Clashed(float reduceSpeed){
+        StartCoroutine(ClashedCoroutine(reduceSpeed));
+    }
+    public IEnumerator ClashedCoroutine(float reduceSpeed)
+    {
+        float originalGameSpeed=GameManager.Instance.gameSpeed;
+        GameManager.Instance.gameSpeed=reduceSpeed;
+        while(GameManager.Instance.gameSpeed<=1){
+           GameManager.Instance.gameSpeed+=Time.deltaTime*addSpeedRatePerTime;
+            yield return null;
+        }
+        GameManager.Instance.gameSpeed=originalGameSpeed;
+        
     }
 }

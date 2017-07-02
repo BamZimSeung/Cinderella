@@ -41,7 +41,7 @@ public class PlayerMove : MonoBehaviour {
             StopCoroutine("Move");
             StartCoroutine("Move", curPos);
         }
-        if (Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump")&&gameObject.transform.position.y<0.85)
         {
             anim.SetTrigger("Jump");
             gameObject.GetComponent<Rigidbody>().velocity=Vector3.up*jumpSpeed;

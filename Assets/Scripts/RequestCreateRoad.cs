@@ -8,7 +8,7 @@ public class RequestCreateRoad : MonoBehaviour {
 
     void OnTriggerEnter(Collider col)
     {
-        if (col.CompareTag("Player"))
+        if (GameManager.Instance.isPlaying &&col.CompareTag("Player"))
         {
             if (!isRequest)
             {

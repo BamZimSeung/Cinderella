@@ -6,6 +6,8 @@ public class Item : MonoBehaviour {
     // 아이템이 가지고 있는 점수
     public int score;
 
+    public int itemIndex;
+
     // 먹혔는지 확인
     bool isGet;
 
@@ -15,6 +17,7 @@ public class Item : MonoBehaviour {
     // 스코어 보드에 접근완료를 판단하는 거리
     public float limitDist = 0.2f;
 
+    public float recoveryTime;
     // 스코어 보드에 접근하는 스피드
     [Range(0,1.0f)]
     public float approachSpeed = 0.1f;
@@ -33,12 +36,12 @@ public class Item : MonoBehaviour {
             if (other.gameObject.CompareTag("Player"))
             {
                 // 점수를 추가
-                GameManager.Instance.AddScore(score);
+                GameManager.Instance.AddScore(score,recoveryTime,itemIndex);
 
                 // 먹힘
                 isGet = true;
 
-                Debug.Log("먹음");
+                Debug.Log("먹음"+itemIndex);
 
                 // 이동 코루틴 시작
                 StartCoroutine("MoveToScoreBoard");

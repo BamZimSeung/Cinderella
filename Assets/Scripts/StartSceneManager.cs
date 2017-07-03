@@ -36,6 +36,11 @@ public class StartSceneManager : MonoBehaviour {
         StartSceneAnim.SetTrigger("Go");
     }
 
+    public void OnClickQuitButton()
+    {
+        Application.Quit();
+    }
+
     public void firstCameraMove()
     {
         ActorsAnim.SetTrigger("Do Nothing");

@@ -17,7 +17,8 @@ public class StartSceneManager : MonoBehaviour {
 
     public Animator KnightAnim;
 
-    public AudioClip DangerSound;
+    public GameObject DangerSound;
+
     public AudioClip HitSound;
 
 	// Use this for initialization
@@ -29,7 +30,7 @@ public class StartSceneManager : MonoBehaviour {
     {
         UIPanel.SetActive(false);
 
-        SoundManager.Instance.PlayOnSound(DangerSound);
+        DangerSound.SetActive(true);
 
         // 카메라 애니메이션 트리거
         StartSceneAnim.SetTrigger("Go");

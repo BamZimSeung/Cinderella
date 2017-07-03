@@ -52,10 +52,22 @@ public class ItemManager : MonoBehaviour {
 			Vector3 posNow=transform.position;
 			obsPos[0]=Random.Range(0,3);
 			obsPos[1]=Random.Range(0,3);
-			if(GameManager.Instance.currentDifficulty.isMultiObs&&obsPos[0]!=obsPos[1]){
-				obsCreate(posNow,obsPos[1]);
+			if(GameManager.Instance.currentDifficulty.isCrazyMode){
+				int underObsPos=Random.Range(0,3);
+				for(int i=0;i<3;i++){
+					if(i==underObsPos){
+						obsCreateCrazy(posNow,i,0);
+					}else{
+						obsCreateCrazy(posNow,i,1);
+					}	
+				}
+				
+			}else{
+				if(GameManager.Instance.currentDifficulty.isMultiObs&&obsPos[0]!=obsPos[1]){
+					obsCreate(posNow,obsPos[1]);
+				}
+				obsCreate(posNow,obsPos[0]);
 			}
-			obsCreate(posNow,obsPos[0]);
 			obsTime=0;
 		}
 	}
@@ -107,6 +119,18 @@ public class ItemManager : MonoBehaviour {
 	void obsCreate(Vector3 posNow,int _obsPos){
 		
 		currObsIndex=Random.Range(0,obsPrefabs.Length);
+		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
+		obs.GetComponent<obstacle>().pos=_obsPos;
+		obs.transform.position=posNow;
+		if(_obsPos==0){
+				obs.transform.position+=Vector3.left*2;
+		}else if(_obsPos==2){
+			obs.transform.position+=Vector3.right*2;
+		}
+		obs.transform.position+=Vector3.down;
+		obs.transform.parent=RoadManager.Instance.roads[RoadManager.Instance.roads.Count-1].transform;
+	}
+	void obsCreateCrazy(Vector3 posNow,int _obsPos,int currObsIndex){
 		GameObject obs= Instantiate(obsPrefabs[currObsIndex]);
 		obs.GetComponent<obstacle>().pos=_obsPos;
 		obs.transform.position=posNow;

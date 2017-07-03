@@ -61,13 +61,16 @@ public class GameManager : MonoBehaviour {
     public difficulty currentDifficulty;
     public int difficultyStep =10000;
     
-    public difficulty[] levels=new difficulty[3];
+    public difficulty[] levels=new difficulty[4];
     
     public int level=0;
 
     public Slider HPbar;
     public Image feverBar;
     public bool isEasyMode=false;
+    float currentTime=0;
+
+    bool isCrazyModePlayed=false;
     
     
 	void Start () {
@@ -101,9 +104,10 @@ public class GameManager : MonoBehaviour {
         comboImg.color = new Color32(imgColor.r, imgColor.g, imgColor.b, colorUIAlpha);
         comboTxt.color = new Color32(txtColor.r, txtColor.g, txtColor.b, colorUIAlpha);
         
-        levels[0]=new difficulty(1.0f,false);
-        levels[1]=new difficulty(2f,false);
-        levels[2]=new difficulty(3f,true);
+        levels[0]=new difficulty(1.0f,false,false);
+        levels[1]=new difficulty(2f,false,false);
+        levels[2]=new difficulty(3f,true,false);
+        levels[3]=new difficulty(4f,true,true);
         currentDifficulty=levels[level];
         
         
@@ -121,7 +125,21 @@ public class GameManager : MonoBehaviour {
         feverBar.fillAmount=(float)feverCount/(float)maxFeverCount;
         if(score>=(level+1)*difficultyStep&&level<2){
             level++;
-            currentDifficulty=levels[level];
+        }
+        currentDifficulty=levels[level];
+        if(!isCrazyModePlayed&&level==2&&score>(level+1)*difficultyStep){
+            level=3;
+            isCrazyModePlayed=true;
+        }
+        if(currentDifficulty.isCrazyMode){
+            currentGameSpeed=gameSpeed*1.5f;
+
+            currentTime +=Time.deltaTime;
+            if(currentTime>=10){
+                currentTime=0;
+                level=2;
+                currentGameSpeed=gameSpeed;
+            }
         }
         
     }
@@ -277,9 +295,11 @@ public class GameManager : MonoBehaviour {
     public class difficulty{
         public float obsSpwanSpeed;
         public bool isMultiObs;
-        public difficulty(float _obsSpwanSpeed, bool _isMultiObs){
+        public bool isCrazyMode;
+        public difficulty(float _obsSpwanSpeed, bool _isMultiObs,bool _isCrazyMode){
             this.obsSpwanSpeed=_obsSpwanSpeed;
             this.isMultiObs=_isMultiObs;
+            this.isCrazyMode=_isCrazyMode;
         }
     }
 }

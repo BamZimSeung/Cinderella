@@ -4,15 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
 
     public static GameManager Instance = null;
 
-    public bool isPlaying=true;
+    public bool isPlaying = true;
 
-    public float currentGameSpeed=1.0f;
+    public float currentGameSpeed = 1.0f;
 
-    public float gameSpeed=1.0f;
+    public float gameSpeed = 1.0f;
 
 
 
@@ -34,17 +35,17 @@ public class GameManager : MonoBehaviour {
     public float restTime;
     public float maxTime;
 
-    int pastIndex= -2;
+    int pastIndex = -2;
 
-    int combo=0;
+    int combo = 0;
 
-    int feverCount=0;
+    int feverCount = 0;
 
-    public int maxFeverCount=100;
+    public int maxFeverCount = 100;
 
     int feverStep = 0;
 
-    public bool isFeverMode=false;
+    public bool isFeverMode = false;
 
     public int feverDecRate;
     public float feverSpeed;
@@ -59,19 +60,25 @@ public class GameManager : MonoBehaviour {
 
     //현재 난이도
     public difficulty currentDifficulty;
-    public int difficultyStep =10000;
-    
-    public difficulty[] levels=new difficulty[3];
-    
-    public int level=0;
+    public int difficultyStep = 10000;
+
+    public difficulty[] levels = new difficulty[4];
+
+    public int level = 0;
 
     public Slider HPbar;
     public Image feverBar;
-    public bool isEasyMode=false;
-    
-    
-	void Start () {
-		if(Instance == null)
+    public bool isEasyMode = false;
+    float currentTime = 0;
+
+    bool isCrazyModePlayed = false;
+
+    public GameObject feverEffect;
+
+
+    void Start()
+    {
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -80,18 +87,19 @@ public class GameManager : MonoBehaviour {
             Destroy(this);
         }
         //레벨별 난이도 설정
-        if(isEasyMode){
-            gameSpeed=1.0f;
-            feverDecRate=10;
-            maxFeverCount=10;
-            difficultyStep=1000;
-            maxTime=200;
+        if (isEasyMode)
+        {
+            gameSpeed = 1.0f;
+            feverDecRate = 10;
+            maxFeverCount = 10;
+            difficultyStep = 1000;
+            maxTime = 200;
         }
 
-        currentGameSpeed=gameSpeed;
+        currentGameSpeed = gameSpeed;
         score = 0;
         scoreTxt.text = score.ToString();
-        restTime=maxTime;
+        restTime = maxTime;
 
         // UI 색깔 초기화
         colorUIAlpha = 0;
@@ -100,78 +108,120 @@ public class GameManager : MonoBehaviour {
 
         comboImg.color = new Color32(imgColor.r, imgColor.g, imgColor.b, colorUIAlpha);
         comboTxt.color = new Color32(txtColor.r, txtColor.g, txtColor.b, colorUIAlpha);
-        
-        levels[0]=new difficulty(1.0f,false);
-        levels[1]=new difficulty(2f,false);
-        levels[2]=new difficulty(3f,true);
-        currentDifficulty=levels[level];
-        
-        
+
+        levels[0] = new difficulty(1.0f, false, false);
+        levels[1] = new difficulty(2f, false, false);
+        levels[2] = new difficulty(3f, true, false);
+        levels[3] = new difficulty(4f, true, true);
+        currentDifficulty = levels[level];
+
+
     }
 
     void Update()
     {
-        restTime-=Time.deltaTime;
-        if(restTime<=0){
-            isPlaying=false;
+        restTime -= Time.deltaTime;
+        if (restTime <= 0)
+        {
+            isPlaying = false;
             PlayerPrefs.SetInt("Score", score);
             SceneManager.LoadScene("End");
         }
-        HPbar.value=restTime/maxTime;
-        feverBar.fillAmount=(float)feverCount/(float)maxFeverCount;
-        if(score>=(level+1)*difficultyStep&&level<2){
+        HPbar.value = restTime / maxTime;
+        feverBar.fillAmount = (float)feverCount / (float)maxFeverCount;
+        if (score >= (level + 1) * difficultyStep && level < 2)
+        {
             level++;
-            currentDifficulty=levels[level];
         }
-        
+        currentDifficulty = levels[level];
+        if (!isCrazyModePlayed && level == 2 && score > (level + 1) * difficultyStep)
+        {
+            level = 3;
+            isCrazyModePlayed = true;
+        }
+        if (currentDifficulty.isCrazyMode)
+        {
+            currentGameSpeed = gameSpeed * 1.5f;
+
+            currentTime += Time.deltaTime;
+            if (currentTime >= 10)
+            {
+                currentTime = 0;
+                level = 2;
+                currentGameSpeed = gameSpeed;
+            }
+        }
+
     }
 
-    public void AddScore(int scorePoint,float recoveryTime,int indexNow)
+    public void AddScore(int scorePoint, float recoveryTime, int indexNow)
     {
-        if(indexNow-pastIndex==1){
+        if (indexNow - pastIndex == 1)
+        {
             combo++;
-        }else if(protectComboIndex.Count!=0){
-            for(int i=1;i<protectComboIndex.Count;i++){
-                if(protectComboIndex[i]-protectComboIndex[i-1]==1){
-                    protectComboIndex.RemoveAt(i-1);
+        }
+        else if (protectComboIndex.Count != 0)
+        {
+            for (int i = 1; i < protectComboIndex.Count; i++)
+            {
+                if (protectComboIndex[i] - protectComboIndex[i - 1] == 1)
+                {
+                    protectComboIndex.RemoveAt(i - 1);
                     i--;
                 }
             }
-           for(int i=1;i<protectComboIndex.Count;i++){
-               if(protectComboIndex[i]-indexNow<-1){
-                 protectComboIndex.RemoveAt(i);  
-                 i--;
-               }
-           }
-           if(protectComboIndex[0]-indexNow==-1){
-            combo++;
-            protectComboIndex.RemoveAt(0);
-           }else{
-               combo=1;
-               feverStep=0;
-           }
-        }else{
-            combo=1;
-            feverStep=0;
+            for (int i = 1; i < protectComboIndex.Count; i++)
+            {
+                if (protectComboIndex[i] - indexNow < -1)
+                {
+                    protectComboIndex.RemoveAt(i);
+                    i--;
+                }
+            }
+            if (protectComboIndex[0] - indexNow == -1)
+            {
+                combo++;
+                protectComboIndex.RemoveAt(0);
+            }
+            else
+            {
+                combo = 1;
+                feverStep = 0;
+            }
         }
-        pastIndex=indexNow;
-        float comboWeight=1.0f;
-        if(combo>=100){
-            comboWeight=3.5f;
-        }else if(combo>=80){
-            comboWeight=3.0f;
-        }else if(combo>=60){
-            comboWeight=2.5f;
-        }else if(combo>40){
-            comboWeight=2.0f;
-        }else if(combo>20){
-            comboWeight=1.5f;
+        else
+        {
+            combo = 1;
+            feverStep = 0;
         }
-        score += (int)(scorePoint*comboWeight);
+        pastIndex = indexNow;
+        float comboWeight = 1.0f;
+        if (combo >= 100)
+        {
+            comboWeight = 3.5f;
+        }
+        else if (combo >= 80)
+        {
+            comboWeight = 3.0f;
+        }
+        else if (combo >= 60)
+        {
+            comboWeight = 2.5f;
+        }
+        else if (combo > 40)
+        {
+            comboWeight = 2.0f;
+        }
+        else if (combo > 20)
+        {
+            comboWeight = 1.5f;
+        }
+        score += (int)(scorePoint * comboWeight);
 
-        restTime+=recoveryTime/gameSpeed;
-        if(restTime>=maxTime){
-            restTime=maxTime;
+        restTime += recoveryTime / gameSpeed;
+        if (restTime >= maxTime)
+        {
+            restTime = maxTime;
         }
 
         scoreTxt.text = score.ToString();
@@ -179,45 +229,59 @@ public class GameManager : MonoBehaviour {
 
         StopCoroutine("ShowCombo");
         StartCoroutine("ShowCombo");
-        if(!isFeverMode){
+        if (!isFeverMode)
+        {
             fever(combo);
         }
-    }	
+    }
 
-    public void fever(int cmb){
-        if(cmb<=100+feverStep){
-            feverCount+=(cmb-feverStep)/10 +1;
-        }else{
-            feverCount+=10;
+    public void fever(int cmb)
+    {
+        if (cmb <= 100 + feverStep)
+        {
+            feverCount += (cmb - feverStep) / 10 + 1;
+        }
+        else
+        {
+            feverCount += 10;
         }
         print(feverCount);
-        if(feverCount>maxFeverCount){
+        if (feverCount > maxFeverCount)
+        {
             StartCoroutine("feverMode");
         }
     }
 
-    IEnumerator feverMode(){
-        isFeverMode=!isFeverMode;
-        float FC=100;
-        currentGameSpeed=feverSpeed;
-        while(FC>=0){
-            FC-=Time.deltaTime*feverDecRate;
+    IEnumerator feverMode()
+    {
+        isFeverMode = !isFeverMode;
+        feverEffect.SetActive(true);
+        float FC = 100;
+        currentGameSpeed = feverSpeed;
+        while (FC >= 0)
+        {
+            FC -= Time.deltaTime * feverDecRate;
             yield return null;
         }
         print("피버 끝");
-        isFeverMode=!isFeverMode;
-        feverStep=combo;
-        feverCount =0;
-        currentGameSpeed=gameSpeed;
+        isFeverMode = !isFeverMode;
+        feverEffect.SetActive(false);
+        feverStep = combo;
+        feverCount = 0;
+        currentGameSpeed = gameSpeed;
     }
 
-    public void Clash(int damage){
-        if(isFeverMode){
-            score += damage*10;
+    public void Clash(int damage)
+    {
+        if (isFeverMode)
+        {
+            score += damage * 10;
 
-        }else{
-            restTime-=damage;
-            combo=0;
+        }
+        else
+        {
+            restTime -= damage;
+            combo = 0;
         }
     }
 
@@ -269,17 +333,21 @@ public class GameManager : MonoBehaviour {
             this.b = _b;
         }
     }
-    
+
     //난이도 조절 필요 변수
     //1.현재 난이도(변수의 인덱스)
     //2.장애물 생성 빈도
     //3.장애물 동시등장 여부
-    public class difficulty{
+    public class difficulty
+    {
         public float obsSpwanSpeed;
         public bool isMultiObs;
-        public difficulty(float _obsSpwanSpeed, bool _isMultiObs){
-            this.obsSpwanSpeed=_obsSpwanSpeed;
-            this.isMultiObs=_isMultiObs;
+        public bool isCrazyMode;
+        public difficulty(float _obsSpwanSpeed, bool _isMultiObs, bool _isCrazyMode)
+        {
+            this.obsSpwanSpeed = _obsSpwanSpeed;
+            this.isMultiObs = _isMultiObs;
+            this.isCrazyMode = _isCrazyMode;
         }
     }
 }

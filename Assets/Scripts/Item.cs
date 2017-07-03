@@ -82,8 +82,6 @@ public class Item : MonoBehaviour {
                 // 먹힘
                 isGet = true;
 
-                Debug.Log("먹음"+itemIndex);
-
                 // 이동 코루틴 시작
                 StartCoroutine("MoveToScoreBoard");
             }

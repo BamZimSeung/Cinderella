@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class StartSceneManager : MonoBehaviour {
 
+    // UI 패널
     public GameObject UIPanel;
 
     public Animator StartSceneAnim;
